@@ -4,15 +4,15 @@ from tqdm import tqdm
 
 
 # Définir le chemin vers le dossier contenant les images
-dossier_images_men = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\data\img\men"
-dossier_images_women = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\data\img\women"
+dossier_images_men = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img\men"
+dossier_images_women = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img\women"
 
 # Créer un dossier de sortie s'il n'existe pas déjà
-dossier_sortie_men = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\data\img_redim\men_redim"
+dossier_sortie_men = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img_redim\men_redim"
 if not os.path.exists(dossier_sortie_men):
     os.makedirs(dossier_sortie_men)
 
-dossier_sortie_women = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\data\img_redim\women_redim"
+dossier_sortie_women = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img_redim\women_redim"
 if not os.path.exists(dossier_sortie_women):
     os.makedirs(dossier_sortie_women)
 
