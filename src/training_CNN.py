@@ -4,10 +4,12 @@ from keras import layers, models, preprocessing
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Réduit la verbosité des avertissements TensorFlow
 
+print("Début")
+
 train_datagen = preprocessing.image.ImageDataGenerator(rescale=1./255)
 
 train_generator = train_datagen.flow_from_directory(
-    r'C:\Users\33678\VsCode\CNN Hommes-Femmes\data\img_redim',
+    r'C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img_redim',
     target_size=(836, 670),  # Les dimensions que vous avez choisies
     batch_size=16,
     class_mode='binary'  # ou 'categorical' selon le nombre de classes
