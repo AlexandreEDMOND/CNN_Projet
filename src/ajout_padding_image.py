@@ -2,75 +2,56 @@ from PIL import Image
 import os
 from tqdm import tqdm
 
+# Fonction pour ajouter des marges à une image
+def ajout_marges_photos(chemin_image_entree, chemin_image_sortie):
+    # Ouvrir l'image
+    img = Image.open(chemin_image_entree)
+
+    # Récupérer les dimensions de l'image
+    largeur, hauteur = img.size
+
+    # Détermination de la taille du carré
+    taille_carre = max(largeur, hauteur)
+
+    # Calculer les marges nécessaires pour rendre l'image carrée
+    marges_horizontal = (taille_carre - largeur) // 2
+    marges_verticale = (taille_carre - hauteur) // 2
+
+    # Ajouter les marges blanches
+    image_carree = Image.new("RGB", (taille_carre, taille_carre), (255, 255, 255))
+    image_carree.paste(img, (marges_horizontal, marges_verticale))
+
+    # Sauvegarder l'image résultante
+    image_carree.save(chemin_image_sortie)
 
 # Définir le chemin vers le dossier contenant les images
-dossier_images_men = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img\men"
-dossier_images_women = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img\women"
+dossier_images_men = r"./reduc_data/img/men"
+dossier_images_women = r"./reduc_data/img/women"
 
 # Créer un dossier de sortie s'il n'existe pas déjà
-dossier_sortie_men = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img_redim\men_redim"
+dossier_sortie_men = r"./reduc_data/img_carre/men"
 if not os.path.exists(dossier_sortie_men):
     os.makedirs(dossier_sortie_men)
 
-dossier_sortie_women = r"C:\Users\33678\VsCode\CNN Hommes-Femmes\reduc_data\img_redim\women_redim"
+dossier_sortie_women = r"./reduc_data/img_carre/women"
 if not os.path.exists(dossier_sortie_women):
     os.makedirs(dossier_sortie_women)
 
-largeurs = []
-hauteurs = []
+# Liste des dossiers dans le dossier img
+dossiers = ["men", "women"]
 
-# Parcourir toutes les images dans le dossier
-for nom_fichier in os.listdir(dossier_images_men):
-    chemin_image = os.path.join(dossier_images_men, nom_fichier)
+# Dossiers d'entrée et de sortie
+dossier_images_entree = r"./reduc_data/img"
+dossier_images_sortie = r"./reduc_data/img_carre"
 
-    # Ouvrir l'image avec PIL
-    image = Image.open(chemin_image)
+for dossier in dossiers:
+    chemin_dossier_entree = os.path.join(dossier_images_entree, dossier)
+    chemin_dossier_sortie = os.path.join(dossier_images_sortie, dossier)
 
-    # Obtenir les dimensions d'origine
-    largeur, hauteur = image.size
+    # Parcourir chaque fichier dans le dossier
+    for fichier in tqdm(os.listdir(chemin_dossier_entree), desc=f"Traitement du dossier {dossier}"):
+        chemin_fichier_entree = os.path.join(chemin_dossier_entree, fichier)
+        chemin_fichier_sortie = os.path.join(chemin_dossier_sortie, fichier)
 
-    largeurs.append(largeur)
-    hauteurs.append(hauteur)
-
-# Parcourir toutes les images dans le dossier
-for nom_fichier in os.listdir(dossier_images_women):
-    chemin_image = os.path.join(dossier_images_women, nom_fichier)
-
-    # Ouvrir l'image avec PIL
-    image = Image.open(chemin_image)
-
-    # Obtenir les dimensions d'origine
-    largeur, hauteur = image.size
-
-    largeurs.append(largeur)
-    hauteurs.append(hauteur)
-
-# Calculer la moyenne des rapports
-largeur_moyen = sum(largeurs) / len(largeurs)
-hauteur_moyen = sum(hauteurs) / len(hauteurs)
-
-# Parcourir toutes les images dans le dossier
-for nom_fichier in tqdm(os.listdir(dossier_images_men)):
-    chemin_image = os.path.join(dossier_images_men, nom_fichier)
-
-    # Ouvrir l'image avec PIL
-    image = Image.open(chemin_image)
-
-    image_redim = image.resize((int(largeur_moyen), int(hauteur_moyen)))
-
-    # Sauvegarder l'image avec des marges dans le dossier de sortie
-    chemin_image_marges = os.path.join(dossier_sortie_men, "with_margins_" + nom_fichier)
-    image_redim.save(chemin_image_marges)
-
-# Parcourir toutes les images dans le dossier
-for nom_fichier in tqdm(os.listdir(dossier_images_women)):
-    chemin_image = os.path.join(dossier_images_women, nom_fichier)
-
-    # Ouvrir l'image avec PIL
-    image = Image.open(chemin_image)
-
-    image_redim = image.resize((int(largeur_moyen), int(hauteur_moyen)))
-
-    # Sauvegarder l'image avec des marges dans le dossier de sortie
-    chemin_image_marges = os.path.join(dossier_sortie_women, "with_margins_" + nom_fichier)
-    image_redim.save(chemin_image_marges)
+        # Redimensionner et ajouter des marges à l'image
+        ajout_marges_photos(chemin_fichier_entree, chemin_fichier_sortie)
