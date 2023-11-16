@@ -3,7 +3,7 @@ import os
 from tqdm import tqdm
 
 # Fonction pour ajouter des marges à une image
-def ajout_marges_photos(chemin_image_entree, chemin_image_sortie):
+def ajout_marges_photo(chemin_image_entree):
     # Ouvrir l'image
     img = Image.open(chemin_image_entree)
 
@@ -21,37 +21,37 @@ def ajout_marges_photos(chemin_image_entree, chemin_image_sortie):
     image_carree = Image.new("RGB", (taille_carre, taille_carre), (255, 255, 255))
     image_carree.paste(img, (marges_horizontal, marges_verticale))
 
-    # Sauvegarder l'image résultante
-    image_carree.save(chemin_image_sortie)
+    return image_carree
 
-# Définir le chemin vers le dossier contenant les images
-dossier_images_men = r"./reduc_data/img/men"
-dossier_images_women = r"./reduc_data/img/women"
 
-# Créer un dossier de sortie s'il n'existe pas déjà
-dossier_sortie_men = r"./reduc_data/img_carre/men"
-if not os.path.exists(dossier_sortie_men):
-    os.makedirs(dossier_sortie_men)
+def ajout_marges_photo_from_dossier(nom_dossier):
+    # Créer un dossier de sortie s'il n'existe pas déjà
+    dossier_sortie_men = os.path.join(nom_dossier, "img_carre", "men")
+    if not os.path.exists(dossier_sortie_men):
+        os.makedirs(dossier_sortie_men)
 
-dossier_sortie_women = r"./reduc_data/img_carre/women"
-if not os.path.exists(dossier_sortie_women):
-    os.makedirs(dossier_sortie_women)
+    dossier_sortie_women = os.path.join(nom_dossier, "img_carre", "women")
+    if not os.path.exists(dossier_sortie_women):
+        os.makedirs(dossier_sortie_women)
 
-# Liste des dossiers dans le dossier img
-dossiers = ["men", "women"]
+    # Liste des dossiers dans le dossier img
+    dossiers = ["men", "women"]
 
-# Dossiers d'entrée et de sortie
-dossier_images_entree = r"./reduc_data/img"
-dossier_images_sortie = r"./reduc_data/img_carre"
+    # Dossiers d'entrée et de sortie
+    dossier_images_entree = os.path.join(nom_dossier, "img")
+    dossier_images_sortie = os.path.join(nom_dossier, "img_carre")
 
-for dossier in dossiers:
-    chemin_dossier_entree = os.path.join(dossier_images_entree, dossier)
-    chemin_dossier_sortie = os.path.join(dossier_images_sortie, dossier)
+    for dossier in dossiers:
+        chemin_dossier_entree = os.path.join(dossier_images_entree, dossier)
+        chemin_dossier_sortie = os.path.join(dossier_images_sortie, dossier)
 
-    # Parcourir chaque fichier dans le dossier
-    for fichier in tqdm(os.listdir(chemin_dossier_entree), desc=f"Traitement du dossier {dossier}"):
-        chemin_fichier_entree = os.path.join(chemin_dossier_entree, fichier)
-        chemin_fichier_sortie = os.path.join(chemin_dossier_sortie, fichier)
+        # Parcourir chaque fichier dans le dossier
+        for fichier in tqdm(os.listdir(chemin_dossier_entree), desc=f"Traitement du dossier {dossier}"):
+            chemin_fichier_entree = os.path.join(chemin_dossier_entree, fichier)
+            chemin_fichier_sortie = os.path.join(chemin_dossier_sortie, fichier)
 
-        # Redimensionner et ajouter des marges à l'image
-        ajout_marges_photos(chemin_fichier_entree, chemin_fichier_sortie)
+            # Redimensionner et ajouter des marges à l'image
+            image_with_marg = ajout_marges_photo(chemin_fichier_entree)
+
+            # Sauvegarder l'image résultante
+            image_with_marg.save(chemin_fichier_sortie)
