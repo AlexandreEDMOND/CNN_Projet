@@ -31,6 +31,8 @@ def training_CNN(nom_dossier, dimension_photo, model_save_path):
     model.fit(train_generator, epochs=10)
 
     # Enregistrez le modèle
+    if not os.path.exists("./models"):
+        os.makedirs("./models")
     model.save(model_save_path)
     print(f"Modèle enregistré à {model_save_path}")
 
